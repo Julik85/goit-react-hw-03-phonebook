@@ -1,26 +1,32 @@
-import ContactListItem from 'components/ContactListItem';
-import PropTypes from 'prop-types';
-import { Contacts } from './ContactList.styled';
+import propTypes from 'prop-types';
+import css from './ContactList.module.css';
 
-const ContactList = ({ contacts, onDelete }) => {
-  return (
-    <Contacts>
-      {contacts.map(({ id, name, number }) => (
-        <ContactListItem
-          key={id}
-          id={id}
-          name={name}
-          number={number}
-          onDelete={onDelete}
-        />
+export const ContactList = ({ contacts, handleDelete }) => (
+  <div className={css.wraperContactList}>
+    <ul className={css.contactList}>
+      {contacts.map((contact, id) => (
+        <li key={id} className={css.contactListItem}>
+          {contact.name}: {contact.number}
+          <button
+            type="button"
+            className={css.contactListItemBtn}
+            onClick={() => handleDelete(contact.id)}
+          >
+            Delete
+          </button>
+        </li>
       ))}
-    </Contacts>
-  );
-};
+    </ul>
+  </div>
+);
 
 ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(PropTypes.object).isRequired,
-  onDelete: PropTypes.func.isRequired,
+  contacts: propTypes.arrayOf(
+    propTypes.exact({
+      id: propTypes.string.isRequired,
+      name: propTypes.string.isRequired,
+      number: propTypes.string.isRequired,
+    })
+  ),
+  handleDelete: propTypes.func.isRequired,
 };
-
-export default ContactList;
